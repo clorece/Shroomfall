@@ -1,2 +1,3 @@
 # Project-L
-A procedurally generated dungeon runner game.
+
+A multiplayer dungeon diving game where players work together to reach deeper floors of the labyrinth. Filled with traps, dangers, and treasure.
