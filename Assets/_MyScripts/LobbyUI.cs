@@ -5,10 +5,10 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private TMP_InputField _sessionNameInput;
     [SerializeField] private NetworkManager _networkManagerPrefab;
 
-    public void CreateLobby()
+    public void OnHostClicked()
     {
         string sessionName = _sessionNameInput.text;
-        if (string.IsNullOrEmpty(_sessionNameInput.text))
+        if (string.IsNullOrEmpty(sessionName))
         {
             Debug.LogError("Session name cannot be empty!");
             return;
@@ -22,7 +22,7 @@ public class LobbyUI : MonoBehaviour
     public void OnJoinClicked()
     {
         string sessionName = _sessionNameInput.text;
-        if (string.IsNullOrEmpty(_sessionNameInput.text))
+        if (string.IsNullOrEmpty(sessionName))
         {
             Debug.LogError("Session name cannot be empty!");
             return;
