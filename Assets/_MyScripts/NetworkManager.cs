@@ -10,35 +10,38 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private NetworkRunner _runner;
 
-    async void Start()
+    private void Awake()
+    {
+        // Ensure this script is not destroyed on scene load
+        DontDestroyOnLoad(gameObject);
+    }
+
+
+    public async Task StartGame(GameMode mode, string sessionName)
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
         _runner.AddCallbacks(this);
 
-        // Default to host
-        var gameMode = GameMode.Host;
-
-#if UNITY_EDITOR
-        // If running in unity editor it is a client
-        gameMode = GameMode.Client;
-#endif
-        
-
         var startGameArgs = new StartGameArgs()
         {
-            GameMode = gameMode,
-            SessionName = "TestRoom",
+            GameMode = mode,
+            SessionName = sessionName,
             PlayerCount = 4,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         };
 
-        await _runner.StartGame(startGameArgs);
+        var result = await _runner.StartGame(startGameArgs);
 
-        // Debug log to show client running
-        if (_runner.IsRunning)
+        if (result.Ok)
         {
-            Debug.Log("--- Network Runner has started! ---");
+            Debug.Log($"--- Successfully started game in {mode} mode with session name: {sessionName} ---");
+            if (_runner.IsServer)
+            {
+                _runner.LoadScene("GameScene");
+            }
+        } else {
+            Debug.LogError($"--- Failed to start game: {result.ShutdownReason} ---");
         }
     }
 
