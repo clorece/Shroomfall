@@ -3,16 +3,13 @@ using Fusion;
 
 public class PlayerMovement : NetworkBehaviour
 {
-    public static PlayerMovement Local { get; private set; }
-
     private NetworkCharacterController _ncc;
 
     [Header("Camera Control")]
     [SerializeField] private Transform _cameraHolder;
     [SerializeField] private float _mouseSensitivity = 2.0f;
 
-    private float _pitch = 0.0f;
-    private float _accumulatedYaw = 0.0f;
+    [Networked] private float NetworkedPitch { get; set; }
 
     public override void Spawned()
     {
@@ -20,52 +17,37 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Object.HasInputAuthority)
         {
-            Local = this;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
     }
 
-    public float GetAccumulatedYawAndReset()
+    public override void Render()
     {
-        float yaw = _accumulatedYaw;
-        _accumulatedYaw = 0f; // Reset for the next tick
-        return yaw;
+        // The camera still updates in Render for the smoothest possible result from our NetworkedPitch
+        _cameraHolder.localRotation = Quaternion.Euler(NetworkedPitch, 0, 0);
     }
 
-    // Update() is for smooth, local, visual-only effects.
-    // Perfect for a first-person camera.
-    void Update()
-    {
-        // We only run this code for the player we are controlling.
-        if (Object.HasInputAuthority)
-        {
-            // Accumulate the horizontal mouse input every frame
-            _accumulatedYaw += Input.GetAxis("Mouse X") * _mouseSensitivity;
-
-            // Handle the vertical camera pitch locally every frame for smoothness
-            float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity;
-            _pitch -= mouseY;
-            _pitch = Mathf.Clamp(_pitch, -85f, 85f);
-            _cameraHolder.localRotation = Quaternion.Euler(_pitch, 0, 0);
-        }
-    }
-
-    // FixedUpdateNetwork() is for physics and simulation-changing logic.
+    // All logic now happens in the network simulation tick
     public override void FixedUpdateNetwork()
     {
-        // GetInput gets the WASD/Jump data from our NetworkManager's OnInput.
         if (GetInput(out NetworkInputData data))
         {
-            transform.Rotate(0, data.Yaw, 0);
-            // --- MOVEMENT ---
-            // The movement uses the rotation that was applied visually in Update().
+            // HORIZONTAL ROTATION (YAW)
+            transform.Rotate(0, data.Yaw * _mouseSensitivity, 0);
+
+            // VERTICAL ROTATION (PITCH)
+            float pitch = NetworkedPitch;
+            pitch -= data.Pitch * _mouseSensitivity;
+            NetworkedPitch = Mathf.Clamp(pitch, -85f, 85f);
+
+            // MOVEMENT
             Vector3 moveDirection = transform.rotation * data.direction;
             _ncc.Move(moveDirection * Runner.DeltaTime * 10f);
 
-            // --- JUMP ---
-            // The jump logic uses the most reliable check we found.
-            if (data.IsJumpPressed && _ncc.Grounded)
+            // JUMP
+            bool isGrounded = Mathf.Abs(_ncc.Velocity.y) < 0.1f;
+            if (isGrounded && data.IsJumpPressed)
             {
                 _ncc.Jump();
             }

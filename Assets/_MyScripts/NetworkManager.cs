@@ -48,21 +48,18 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         var myInput = new NetworkInputData();
 
         myInput.direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        myInput.Yaw = Input.GetAxis("Mouse X");
+        myInput.Pitch = Input.GetAxis("Mouse Y");
         myInput.IsJumpPressed = Input.GetKey(KeyCode.Space);
 
-        if (PlayerMovement.Local != null)
-        {
-                       // Get the camera's yaw rotation for the player.
-            myInput.Yaw = PlayerMovement.Local.GetAccumulatedYawAndReset();
-        }
-        
+        input.Set(myInput);
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
-            runner.Spawn(_playerPrefab, new Vector3(0, 1, 0), Quaternion.identity, player);
+            runner.Spawn(_playerPrefab, new Vector3(0, 18, 0), Quaternion.identity, player);
         }
     }
 
