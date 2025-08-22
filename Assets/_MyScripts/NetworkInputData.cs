@@ -6,5 +6,6 @@ using UnityEngine;
 public struct NetworkInputData : INetworkInput
 {
     public Vector3 direction;
-    public NetworkBool isJumpPressed;
+    public NetworkBool IsJumpPressed;
+    public float Yaw;
 }
