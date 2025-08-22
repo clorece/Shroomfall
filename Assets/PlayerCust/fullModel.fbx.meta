@@ -22,7 +22,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -83,7 +83,57 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: fullModel(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Band
+      parentName: fullModel(Clone)
+      position: {x: -1.1179421, y: 4.152883, z: 0.4300213}
+      rotation: {x: -0.100572444, y: -0.097084, z: -0.009862695, w: 0.99013263}
+      scale: {x: 100.13603, y: 95.22714, z: 100.13605}
+    - name: Body
+      parentName: fullModel(Clone)
+      position: {x: -0, y: 0, z: 0.18064737}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Cap
+      parentName: fullModel(Clone)
+      position: {x: -0, y: -0.090847194, z: 0.18064737}
+      rotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
+      scale: {x: 243.84703, y: 243.84703, z: 243.84702}
+    - name: eyesDead
+      parentName: fullModel(Clone)
+      position: {x: 0.44161636, y: 4.941209, z: 0.7811195}
+      rotation: {x: -0.67644393, y: 0.20596974, z: 0.2059697, w: 0.6764441}
+      scale: {x: 27.962515, y: 27.962515, z: 10.968012}
+    - name: eyesLarge
+      parentName: fullModel(Clone)
+      position: {x: 0.5600356, y: 4.941209, z: 0.962525}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 21.095203, y: 21.095203, z: 21.095203}
+    - name: eyesSmall
+      parentName: fullModel(Clone)
+      position: {x: 0.010900084, y: 4.941209, z: 0.962525}
+      rotation: {x: -0.70710677, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 10.4524555, y: 10.4524555, z: 10.4524555}
+    - name: eyesTall
+      parentName: fullModel(Clone)
+      position: {x: -0.07422222, y: 4.941209, z: 0.8562792}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 9.301207, y: 21.095203, z: 21.095203}
+    - name: eyesWide
+      parentName: fullModel(Clone)
+      position: {x: 0.614428, y: 4.941209, z: 0.7429784}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 22.819324, y: 22.819324, z: 8.950647}
+    - name: mouthPlane
+      parentName: fullModel(Clone)
+      position: {x: -0.028820347, y: 4.591445, z: 1.1571726}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 100, y: 100, z: 100}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -94,13 +144,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
