@@ -4923,6 +4923,8 @@ public static class MarchingCube
 
         return mesh;
     }
+
+    // set unity mesh filter component from the meshes we create
     public static void SetMesh(ref Mesh mesh)
     {
         //our mesh data to meshfilter
@@ -4935,12 +4937,10 @@ public static class MarchingCube
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
     }
+
+    // use of 3D Perlin Noise to procedurally generate terrain that we march our cubes with
     public static float PerlinNoise3D(float x, float y, float z)
     {
-        // use unity's PerlinNoise 2D
-        // youtube video time 0:25sec = https://www.youtube.com/watch?v=TZFv493D7jo&t=25s  
-        // youtube video time 0:20sec = https://www.youtube.com/watch?v=Aga0TBJkchM
-
         float AB = Mathf.PerlinNoise(x, y);         // get all three(3) permutations of noise for x,y and z
         float BC = Mathf.PerlinNoise(y, z);
         float AC = Mathf.PerlinNoise(x, z);
