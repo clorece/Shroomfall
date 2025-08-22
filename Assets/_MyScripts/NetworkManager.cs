@@ -49,6 +49,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         var myInput = new NetworkInputData();
         myInput.direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        myInput.isJumpPressed = Input.GetKeyDown(KeyCode.Space);
         input.Set(myInput);
     }
 
