@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// This class manages the network session and player spawning
+// 
+
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
@@ -42,7 +45,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    // OnInput now gathers ALL of our inputs.
+    // Checks for input every tick
+    // This is called by Fusion, we don't call it directly
+    // It collects input from the local player and sends it to the server as a NetworkInputData struct
+
+    // Current flow: Unity Input -> OnInput -> NetworkInputData -> PlayerMovement (receives package FixedUpdateNetwork) -> NetworkCharacterController (moves the player)
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var myInput = new NetworkInputData();
@@ -63,7 +70,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    // --- All other required empty functions ---
+    // All other required but empty functions
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }

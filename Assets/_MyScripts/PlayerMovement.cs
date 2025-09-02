@@ -25,6 +25,7 @@ public class PlayerMovement : NetworkBehaviour
     public override void Render()
     {
         // The camera still updates in Render for the smoothest possible result from our NetworkedPitch
+        // This is because Render is called every frame, while FixedUpdateNetwork is called on a fixed timestep
         _cameraHolder.localRotation = Quaternion.Euler(NetworkedPitch, 0, 0);
     }
 
