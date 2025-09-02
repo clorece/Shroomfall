@@ -2,91 +2,80 @@ using UnityEngine;
 
 public class ShroomCustomizerMPB : MonoBehaviour
 {
-    [Header("Separate renderers")]
-    public Renderer body;        // Body object (URP Lit / Standard)
-    public Renderer cap;         // Cap (top only)
-    public Renderer band;        // Strap around the chest (always = cap color)
-    public Renderer mouthQuad;   // Unlit/Transparent material
+    [Header("Renderers")]
+    public Renderer body;
+    public Renderer cap;
+    public Renderer band;
+    public Renderer mouthQuad;
 
-    [Header("Face options")]
-    public GameObject[] eyeVariants;   // eyesDead, eyesLarge, eyesSmall, etc.
-    public Texture2D[] mouthOptions;   // transparent PNGs for the mouth
+    [Header("Variants")]
+    public GameObject[] eyeVariants;
+    public Texture2D[] mouthOptions;
 
-    // MPBs let us override material values per-renderer without duplicating materials
+    // one block per renderer (reused)
     MaterialPropertyBlock _mpbBody, _mpbCap, _mpbBand, _mpbMouth;
 
-    // Property IDs (URP + Built-in). We write both so it works in either pipeline.
-    static readonly int BaseColor = Shader.PropertyToID("_BaseColor"); // URP Lit/Simple Lit
-    static readonly int ColorProp = Shader.PropertyToID("_Color");     // Built-in Standard
-    static readonly int BaseMap   = Shader.PropertyToID("_BaseMap");
-    static readonly int MainTex   = Shader.PropertyToID("_MainTex");
-
-    void Awake() {
-        _mpbBody = new MaterialPropertyBlock();
-        _mpbCap  = new MaterialPropertyBlock();
-        _mpbBand = new MaterialPropertyBlock();
-        _mpbMouth= new MaterialPropertyBlock();
+    MaterialPropertyBlock GetBlock(ref MaterialPropertyBlock b)
+    {
+        if (b == null) b = new MaterialPropertyBlock();
+        else b.Clear();
+        return b;
     }
 
-    void Start() {
-        // Make sure band starts as the same color as the cap material's initial color
-        if (cap && band) {
-            var c = ReadColorFromShared(cap);
-            ApplyColor(band, _mpbBand, c);
+    // ---- Colors ----
+    public void SetBodyColor(Color c)
+    {
+        if (!body) return;
+        var b = GetBlock(ref _mpbBody);
+        body.GetPropertyBlock(b);
+        b.SetColor("_BaseColor", c);   // URP
+        b.SetColor("_Color", c);       // Built-in fallback
+        body.SetPropertyBlock(b);
+    }
+
+    public void SetCapColor(Color c)
+    {
+        if (cap)
+        {
+            var b = GetBlock(ref _mpbCap);
+            cap.GetPropertyBlock(b);
+            b.SetColor("_BaseColor", c);
+            b.SetColor("_Color", c);
+            cap.SetPropertyBlock(b);
+        }
+        if (band)
+        {
+            var b = GetBlock(ref _mpbBand);
+            band.GetPropertyBlock(b);
+            b.SetColor("_BaseColor", c);
+            b.SetColor("_Color", c);
+            band.SetPropertyBlock(b);
         }
     }
 
-    // ---------- Colors ----------
-    public void SetBodyColor(Color c) {
-        ApplyColor(body, _mpbBody, c);
-    }
-
-    public void SetCapColor(Color c) {
-        ApplyColor(cap,  _mpbCap,  c);  // set cap
-        ApplyColor(band, _mpbBand, c);  // strap follows cap
-    }
-
-    // Helper to apply a color via MPB to a specific renderer+slot
-    void ApplyColor(Renderer r, MaterialPropertyBlock mpb, Color c) {
-        if (!r) return;
-        r.GetPropertyBlock(mpb);
-        mpb.SetColor(BaseColor, c);  // URP
-        mpb.SetColor(ColorProp, c);  // Built-in
-        r.SetPropertyBlock(mpb);
-    }
-
-    // Read a color from the shared material (used to init the band once)
-    Color ReadColorFromShared(Renderer r) {
-        if (!r || !r.sharedMaterial) return Color.white;
-        var m = r.sharedMaterial;
-        if (m.HasProperty(BaseColor)) return m.GetColor(BaseColor);
-        if (m.HasProperty(ColorProp)) return m.GetColor(ColorProp);
-        return Color.white;
-    }
-
-    // Hex helpers for UI buttons or your color wheel wrapper
-    public void SetBodyHex(string hex) { if (ColorUtility.TryParseHtmlString(hex, out var c)) SetBodyColor(c); }
-    public void SetCapHex (string hex) { if (ColorUtility.TryParseHtmlString(hex, out var c)) SetCapColor(c);  }
-
-    // ---------- Eyes (3D variants as GameObjects) ----------
-    int _currentEyes = 0;
-    public void SetEyesIndex(int i) {
+    // ---- Eyes ----
+    public void SetEyesIndex(int i)
+    {
         if (eyeVariants == null || eyeVariants.Length == 0) return;
-        i = Mathf.Clamp(i, 0, eyeVariants.Length - 1);
+        i = (i % eyeVariants.Length + eyeVariants.Length) % eyeVariants.Length;
         for (int k = 0; k < eyeVariants.Length; k++)
             if (eyeVariants[k]) eyeVariants[k].SetActive(k == i);
-        _currentEyes = i;
     }
 
-    // ---------- Mouth (swap texture on single quad) ----------
-    int _currentMouth = 0;
-    public void SetMouthIndex(int i) {
+    // ---- Mouth (texture swap on the mouth plane) ----
+    public void SetMouthIndex(int i)
+    {
         if (!mouthQuad || mouthOptions == null || mouthOptions.Length == 0) return;
-        i = Mathf.Clamp(i, 0, mouthOptions.Length - 1);
-        mouthQuad.GetPropertyBlock(_mpbMouth);
-        _mpbMouth.SetTexture(BaseMap, mouthOptions[i]); // URP
-        _mpbMouth.SetTexture(MainTex, mouthOptions[i]); // Built-in
-        mouthQuad.SetPropertyBlock(_mpbMouth);
-        _currentMouth = i;
+        i = (i % mouthOptions.Length + mouthOptions.Length) % mouthOptions.Length;
+
+        var tex = mouthOptions[i];
+        var b = GetBlock(ref _mpbMouth);
+        mouthQuad.GetPropertyBlock(b);
+        b.SetTexture("_BaseMap", tex); // URP
+        b.SetTexture("_MainTex", tex); // Built-in fallback
+        // ensure visible (white, full alpha)
+        b.SetColor("_BaseColor", Color.white);
+        b.SetColor("_Color", Color.white);
+        mouthQuad.SetPropertyBlock(b);
     }
 }
