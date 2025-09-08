@@ -15,6 +15,12 @@ public class ShroomCustomizerMPB : MonoBehaviour
     // one block per renderer (reused)
     MaterialPropertyBlock _mpbBody, _mpbCap, _mpbBand, _mpbMouth;
 
+    // >>> add: remember current picks
+    [SerializeField] Color _bodyColor = Color.white;
+    [SerializeField] Color _capColor  = Color.white;
+    [SerializeField] int _eyeIndex = 0;
+    [SerializeField] int _mouthIndex = 0;
+
     MaterialPropertyBlock GetBlock(ref MaterialPropertyBlock b)
     {
         if (b == null) b = new MaterialPropertyBlock();
@@ -25,6 +31,7 @@ public class ShroomCustomizerMPB : MonoBehaviour
     // ---- Colors ----
     public void SetBodyColor(Color c)
     {
+        _bodyColor = c; // <<< store
         if (!body) return;
         var b = GetBlock(ref _mpbBody);
         body.GetPropertyBlock(b);
@@ -35,6 +42,7 @@ public class ShroomCustomizerMPB : MonoBehaviour
 
     public void SetCapColor(Color c)
     {
+        _capColor = c; // <<< store
         if (cap)
         {
             var b = GetBlock(ref _mpbCap);
@@ -58,6 +66,7 @@ public class ShroomCustomizerMPB : MonoBehaviour
     {
         if (eyeVariants == null || eyeVariants.Length == 0) return;
         i = (i % eyeVariants.Length + eyeVariants.Length) % eyeVariants.Length;
+        _eyeIndex = i; // <<< store
         for (int k = 0; k < eyeVariants.Length; k++)
             if (eyeVariants[k]) eyeVariants[k].SetActive(k == i);
     }
@@ -67,6 +76,7 @@ public class ShroomCustomizerMPB : MonoBehaviour
     {
         if (!mouthQuad || mouthOptions == null || mouthOptions.Length == 0) return;
         i = (i % mouthOptions.Length + mouthOptions.Length) % mouthOptions.Length;
+        _mouthIndex = i; // <<< store
 
         var tex = mouthOptions[i];
         var b = GetBlock(ref _mpbMouth);
@@ -77,5 +87,21 @@ public class ShroomCustomizerMPB : MonoBehaviour
         b.SetColor("_BaseColor", Color.white);
         b.SetColor("_Color", Color.white);
         mouthQuad.SetPropertyBlock(b);
+    }
+
+    // >>> add: export current picks
+    public ShroomData GetData() => new ShroomData {
+        body = _bodyColor,
+        cap  = _capColor,
+        eyes = _eyeIndex,
+        mouth= _mouthIndex
+    };
+
+    // >>> add: apply a saved snapshot
+    public void ApplyData(ShroomData d) {
+        SetBodyColor(d.body);
+        SetCapColor(d.cap);
+        SetEyesIndex(d.eyes);
+        SetMouthIndex(d.mouth);
     }
 }
