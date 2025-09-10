@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,23 @@ public class ChunkStreamer : MonoBehaviour
 
     private void Update()
     {
-        if (player == null) return;
+        //if (player == null) return;
+         // If player not assigned, try to auto-find the local player
+        if (player == null)
+        {
+            var objs = FindObjectsOfType<NetworkObject>();
+            foreach (var obj in objs)
+            {
+                if (obj.HasInputAuthority)   // <-- this is the local player's object
+                {
+                    player = obj.transform;
+                    break;
+                }
+            }
+
+            if (player == null)
+                return; // no player yet, skip
+        }
 
         var playerChunk = WorldToChunk(player.position);
 
