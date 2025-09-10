@@ -42,14 +42,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    // OnInput now gathers ALL of our inputs.
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var myInput = new NetworkInputData();
 
         myInput.direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        myInput.Yaw = Input.GetAxis("Mouse X");
-        myInput.Pitch = Input.GetAxis("Mouse Y");
         myInput.IsJumpPressed = Input.GetKey(KeyCode.Space);
 
         input.Set(myInput);

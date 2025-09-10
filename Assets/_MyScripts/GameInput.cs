@@ -2,5 +2,5 @@ using Fusion;
 
 public enum GameInputButtons
 {
-    Jump = 0, // The first button is 0. We could add more like Shoot = 1, Crouch = 2, etc.
+    Jump = 0, // can add more buttons here
 }
