@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// This class manages the network session and player spawning
-// 
-
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
@@ -45,18 +42,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    // Checks for input every tick
-    // This is called by Fusion, we don't call it directly
-    // It collects input from the local player and sends it to the server as a NetworkInputData struct
-
-    // Current flow: Unity Input -> OnInput -> NetworkInputData -> PlayerMovement (receives package FixedUpdateNetwork) -> NetworkCharacterController (moves the player)
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var myInput = new NetworkInputData();
 
         myInput.direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        myInput.Yaw = Input.GetAxis("Mouse X");
-        myInput.Pitch = Input.GetAxis("Mouse Y");
         myInput.IsJumpPressed = Input.GetKey(KeyCode.Space);
 
         input.Set(myInput);
@@ -70,7 +60,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    // All other required but empty functions
+    // --- All other required empty functions ---
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
