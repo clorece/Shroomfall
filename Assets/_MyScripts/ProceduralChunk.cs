@@ -71,8 +71,8 @@ public class ProceduralChunk : MonoBehaviour
         meshFilter.sharedMesh = mesh;
 
         // Force collider to rebuild: clear then reassign
-        //meshCollider.sharedMesh = null;
-        //meshCollider.sharedMesh = mesh;
+        meshCollider.sharedMesh = null;
+        meshCollider.sharedMesh = mesh;
         // If these chunks are static, also consider: meshCollider.cookingOptions = MeshColliderCookingOptions.EnableMeshCleaning | MeshColliderCookingOptions.CookForFasterSimulation;
     }
 }
