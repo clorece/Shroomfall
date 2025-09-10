@@ -1,9 +1,11 @@
 using Fusion;
 using UnityEngine;
 
-// wow this whole thing is dumb
-// need this to fix problem with input not registering in PlayerMovement.cs
+// Collects all of our input for the current tick
 public struct NetworkInputData : INetworkInput
 {
     public Vector3 direction;
+    public NetworkBool IsJumpPressed;
+    public float Yaw;
+    public float Pitch;
 }

@@ -1,22 +1,21 @@
-using UnityEngine;
+using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+// This class manages the network session and player spawning
+// 
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private NetworkRunner _runner;
 
-    private void Awake()
-    {
-        // Ensure this script is not destroyed on scene load
-        DontDestroyOnLoad(gameObject);
-    }
-
-
+    // This is the public function our UI will call
     public async Task StartGame(GameMode mode, string sessionName)
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
@@ -35,34 +34,43 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
         if (result.Ok)
         {
-            Debug.Log($"--- Successfully started game in {mode} mode with session name: {sessionName} ---");
             if (_runner.IsServer)
             {
                 _runner.LoadScene("GameScene");
             }
-        } else {
-            Debug.LogError($"--- Failed to start game: {result.ShutdownReason} ---");
+        }
+        else
+        {
+            Debug.LogError($"Failed to Start Game: {result.ShutdownReason}");
         }
     }
 
+    // Checks for input every tick
+    // This is called by Fusion, we don't call it directly
+    // It collects input from the local player and sends it to the server as a NetworkInputData struct
+
+    // Current flow: Unity Input -> OnInput -> NetworkInputData -> PlayerMovement (receives package FixedUpdateNetwork) -> NetworkCharacterController (moves the player)
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var myInput = new NetworkInputData();
+
         myInput.direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        myInput.Yaw = Input.GetAxis("Mouse X");
+        myInput.Pitch = Input.GetAxis("Mouse Y");
+        myInput.IsJumpPressed = Input.GetKey(KeyCode.Space);
+
         input.Set(myInput);
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log("--- OnPlayerJoined was called for player: " + player.PlayerId + " ---");
         if (runner.IsServer)
         {
-            Debug.Log("--- We are the server/host. Spawning player... ---");
-            runner.Spawn(_playerPrefab, new Vector3(0, 1, 0), Quaternion.identity, player);
+            runner.Spawn(_playerPrefab, new Vector3(0, 18, 0), Quaternion.identity, player);
         }
     }
 
-    // Required but empty
+    // All other required but empty functions
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
