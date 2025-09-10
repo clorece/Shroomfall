@@ -9,12 +9,12 @@ public class ChunkStreamer : MonoBehaviour
 
     [Header("Chunk Settings")]
     // Number of cubes along each axis in one chunk (not points).
-    public Vector3Int chunkSize = new Vector3Int(32, 32, 32);
+    public Vector3Int chunkSize = new Vector3Int(16, 16, 16);
     // How many chunks out from the player to keep (Manhattan/chebyshev radius)
     public int viewRadius = 2;
 
     [Header("Noise")]
-    public float zoom = 4f;
+    public float zoom = 1.0f;
     [Range(0f, 1f)] public float noiseLimit = 0.5f;
 
     // Active chunks: key = chunk coord (in chunk units), value = chunk component
