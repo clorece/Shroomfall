@@ -3,13 +3,16 @@ using Fusion;
 
 public class PlayerMovement : NetworkBehaviour
 {
+    // setup
     private NetworkCharacterController _ncc;
+    [SerializeField] private Transform _visualsRoot;
 
     [Header("Camera Control")]
     [SerializeField] private Transform _cameraHolder;
     [SerializeField] private float _mouseSensitivity = 2.0f;
 
-    [Networked] private float NetworkedPitch { get; set; }
+    private float _pitch = 0.0f;
+    private float _yaw = 0.0f;
 
     public override void Spawned()
     {
@@ -19,34 +22,44 @@ public class PlayerMovement : NetworkBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            _yaw = transform.rotation.eulerAngles.y;
         }
     }
 
-    public override void Render()
+    // Update is for local visuals
+    void Update()
     {
-        // The camera still updates in Render for the smoothest possible result from our NetworkedPitch
-        // This is because Render is called every frame, while FixedUpdateNetwork is called on a fixed timestep
-        _cameraHolder.localRotation = Quaternion.Euler(NetworkedPitch, 0, 0);
+        if (Object.HasInputAuthority)
+        {
+            // Get mouse input
+            float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity;
+
+            // Rotate the visuals object left/right
+            _yaw += mouseX;
+            _visualsRoot.rotation = Quaternion.Euler(0, _yaw, 0);
+
+            // Rotate the camera holder up/down
+            _pitch -= mouseY;
+            _pitch = Mathf.Clamp(_pitch, -85f, 85f);
+            _cameraHolder.localRotation = Quaternion.Euler(_pitch, 0, 0);
+        }
     }
 
-    // All logic now happens in the network simulation tick
+    // FixedUpdateNetwork is for the networked physics simulation
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
-            // HORIZONTAL ROTATION (YAW)
-            transform.Rotate(0, data.Yaw * _mouseSensitivity, 0);
+            // align player rotation with visuals rotation
+            transform.rotation = _visualsRoot.rotation;
 
-            // VERTICAL ROTATION (PITCH)
-            float pitch = NetworkedPitch;
-            pitch -= data.Pitch * _mouseSensitivity;
-            NetworkedPitch = Mathf.Clamp(pitch, -85f, 85f);
-
-            // MOVEMENT
+            // movement
             Vector3 moveDirection = transform.rotation * data.direction;
             _ncc.Move(moveDirection * Runner.DeltaTime * 10f);
 
-            // JUMP
+            // jumping
             bool isGrounded = Mathf.Abs(_ncc.Velocity.y) < 0.1f;
             if (isGrounded && data.IsJumpPressed)
             {

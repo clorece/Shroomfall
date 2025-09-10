@@ -6,6 +6,6 @@ public struct NetworkInputData : INetworkInput
 {
     public Vector3 direction;
     public NetworkBool IsJumpPressed;
-    public float Yaw;
-    public float Pitch;
+    // public float Yaw;
+    // public float Pitch;
 }
