@@ -1,5 +1,7 @@
 # Shroomfall
 
+![fallingmushroom](https://github.com/user-attachments/assets/4c1bfe19-313b-4e53-8153-35881fd8e230)
+
 ## Overview
 A multiplayer cavern diving game where players work together to reach deeper sections of procedurally generated caverns.
 Find tools during your expedition, and work together to avoid traps, fall damage, and enemies.
