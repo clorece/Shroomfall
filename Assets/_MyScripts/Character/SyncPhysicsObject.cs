@@ -1,11 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SyncPhysicsObject : MonoBehaviour
 {
     Rigidbody rigidbody3D;
     ConfigurableJoint joint;
+
     [SerializeField]
     Rigidbody animatedRigidbody3D;
+
     [SerializeField]
     bool syncAnimation = false;
 
@@ -18,14 +22,14 @@ public class SyncPhysicsObject : MonoBehaviour
         joint = GetComponent<ConfigurableJoint>();
 
         //Store the starting local rotation
-        startLocalRotation = animatedRigidbody3D.transform.localRotation;
+        startLocalRotation = transform.localRotation;
     }
 
     public void UpdateJointFromAnimation()
     {
         if (!syncAnimation)
             return;
-            
+
         ConfigurableJointExtensions.SetTargetRotationLocal(joint, animatedRigidbody3D.transform.localRotation, startLocalRotation);
     }
 }
