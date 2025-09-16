@@ -971,8 +971,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1166361689}
+  - component: {fileID: 1166361690}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Floor-0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -993,60 +994,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1180316800
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1180316802}
-  - component: {fileID: 1180316801}
-  m_Layer: 0
-  m_Name: Floor-0
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1180316801
+--- !u!114 &1166361690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1180316800}
+  m_GameObject: {fileID: 1166361688}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b2adc24e688e8841887873ee6b3e08f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::Generator3D
   size: {x: 30, y: 5, z: 30}
   roomCount: 90
   roomMaxSize: {x: 8, y: 4, z: 8}
-  cubePrefab: {fileID: 7415050535990569633, guid: 3fb4ddafbd160274ba8f07a1cf8cd5ee, type: 3}
+  cubePrefab: {fileID: 2126633678}
   stairPrefab: {fileID: 0}
   roomPrefab: {fileID: 0}
   hallwayPrefab: {fileID: 0}
-  redMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
-  blueMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
-  greenMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
---- !u!4 &1180316802
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1180316800}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.23, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  mat: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
 --- !u!1 &1301047930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,6 +1296,5 @@ SceneRoots:
   - {fileID: 12517569}
   - {fileID: 868308067}
   - {fileID: 931798685}
-  - {fileID: 1180316802}
   - {fileID: 1301047932}
   - {fileID: 1166361689}

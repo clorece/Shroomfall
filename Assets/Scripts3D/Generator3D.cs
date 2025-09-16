@@ -70,11 +70,7 @@ public class Generator3D : MonoBehaviour
     [SerializeField]
     GameObject hallwayPrefab;
     [SerializeField]
-    Material redMaterial;
-    [SerializeField]
-    Material blueMaterial;
-    [SerializeField]
-    Material greenMaterial;
+    Material mat;
 
     Random random;
     Grid3D<CellType> grid;
@@ -322,16 +318,16 @@ public class Generator3D : MonoBehaviour
 
     void PlaceRoom(Vector3Int location, Vector3Int size)
     {
-        PlaceCube(location, size, redMaterial);
+        PlaceCube(location, size, mat);
     }
 
     void PlaceHallway(Vector3Int location)
     {
-        PlaceCube(location, new Vector3Int(1, 1, 1), blueMaterial);
+        PlaceCube(location, new Vector3Int(1, 1, 1), mat);
     }
 
     void PlaceStairs(Vector3Int location)
     {
-        PlaceCube(location, new Vector3Int(1, 1, 1), greenMaterial);
+        PlaceCube(location, new Vector3Int(1, 1, 1), mat);
     }
 }
