@@ -11,6 +11,9 @@ using System.Linq;
 public class NetworkRunnerHandler : MonoBehaviour
 {
     [SerializeField]
+    TMPro.TMP_Text joinErrorLabel;
+
+    [SerializeField]
     NetworkRunner networkRunnerPrefab;
 
     NetworkRunner networkRunner;
@@ -30,10 +33,10 @@ public class NetworkRunnerHandler : MonoBehaviour
             networkRunner.name = "Network runner";
         }
 
-        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
+        //var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
 
         Utils.DebugLog("InitializeNetworkRunner called");
-    
+
     }
 
     INetworkSceneManager GetSceneManager(NetworkRunner runner)
@@ -54,7 +57,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         INetworkSceneManager sceneManager = GetSceneManager(networkRunner);
 
         networkRunner.ProvideInput = true;
-        
+
         var spawner = FindObjectOfType<Spawner>();
         if (spawner) networkRunner.AddCallbacks(spawner);
 
@@ -67,6 +70,59 @@ public class NetworkRunnerHandler : MonoBehaviour
             SessionName = sessionName,
             CustomLobbyName = "OurLobbyID",
             SceneManager = sceneManager
+        });
+    }
+
+        string MakeCode(int len = 6) {
+        const string chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no O/0/I/1
+        var rng = new System.Random();
+        var s = new char[len];
+        for (int i = 0; i < len; i++) s[i] = chars[rng.Next(chars.Length)];
+        return new string(s);
+        }
+
+        public async void HostGame() {
+        var code = MakeCode();
+        if (!networkRunner) networkRunner = Instantiate(networkRunnerPrefab);
+        networkRunner.name = "Network Runner";
+        DontDestroyOnLoad(networkRunner.gameObject);
+        networkRunner.ProvideInput = true;
+
+        var sceneRef = SceneRef.FromIndex(1);     // Game scene index
+        var sceneMgr = GetSceneManager(networkRunner); // you already have this
+        // Make sure callbacks are added (Spawner will also self-register, see below)
+        var spawner = FindObjectOfType<Spawner>();
+        if (spawner) networkRunner.AddCallbacks(spawner);
+
+        await networkRunner.StartGame(new StartGameArgs{
+            GameMode        = GameMode.Host,
+            SessionName     = code,
+            CustomLobbyName = "CodeLobby",
+            Address         = NetAddress.Any(),
+            Scene           = sceneRef,
+            SceneManager    = sceneMgr
+        });
+
+        // If you kept a lobby UI, also display `code` somewhere on-screen
+        }
+
+       public async void JoinGame(string code) {
+            if (!networkRunner)
+            {
+                networkRunner = Instantiate(networkRunnerPrefab);
+                networkRunner.name = "Network Runner";
+                DontDestroyOnLoad(networkRunner.gameObject);
+            }
+
+            networkRunner.ProvideInput = true;
+            
+        await networkRunner.StartGame(new StartGameArgs
+        {
+            GameMode = GameMode.Client,
+            SessionName = code,
+            CustomLobbyName = "CodeLobby",
+            Address = NetAddress.Any(),
+            SceneManager = GetSceneManager(networkRunner)
         });
     }
 

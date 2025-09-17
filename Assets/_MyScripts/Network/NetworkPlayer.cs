@@ -47,6 +47,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     void Awake()
     {
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
+        if (!mainJoint) mainJoint = GetComponent<ConfigurableJoint>();
+
     }
 
     // Start is called before the first frame update
@@ -99,16 +101,23 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             localForwardVelocity = localVelocifyVsForward.magnitude;
         }
         
-        if(GetInput(out NetworkInputData networkInputData))
+        if (GetInput(out NetworkInputData networkInputData))
         {
+            //Only the state authority runs physics/joints
+            if (!Object.HasStateAuthority) { isJumpButtonPressed = false; return; }
+
             float inputMagnitued = networkInputData.movementInput.magnitude;
 
             if (inputMagnitued != 0)
             {
-                Quaternion desiredDirection = Quaternion.LookRotation(new Vector3(networkInputData.movementInput.x, 0, networkInputData.movementInput.y * -1), transform.up);
+                Quaternion desiredDirection = Quaternion.LookRotation(
+                    new Vector3(networkInputData.movementInput.x, 0, networkInputData.movementInput.y * -1),
+                    transform.up
+                );
 
-                //Rotate target towards direction
-                mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desiredDirection, Runner.DeltaTime * 300);
+                //Guard joint write (it’s destroyed on proxies)
+                if (mainJoint)
+                    mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desiredDirection, Runner.DeltaTime * 300);
 
                 if (localForwardVelocity < maxSpeed)
                 {
@@ -120,10 +129,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             if (isGrounded && networkInputData.isJumpPressed)
             {
                 rigidbody3D.AddForce(Vector3.up * 20, ForceMode.Impulse);
-
                 isJumpButtonPressed = false;
             }
         }
+
 
        
         if(Object.HasStateAuthority)
@@ -181,7 +190,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public override void Spawned()
     {
-        if(Object.HasInputAuthority)
+        if (Object.HasInputAuthority)
         {
             Local = this;
 
@@ -204,6 +213,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             rigidbody3D.isKinematic = true;
         }
+        
+        var shroom = GetComponentInChildren<ShroomCustomizerMPB>(true);
+        if (shroom) shroom.Reapply();
+
     }
 
     public void PlayerLeft(PlayerRef player)
