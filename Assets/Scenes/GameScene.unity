@@ -1003,17 +1003,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1166361688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b2adc24e688e8841887873ee6b3e08f, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d1e48913e1b2b4d95025e49bedae97, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Generator3D
-  size: {x: 30, y: 5, z: 30}
-  roomCount: 90
-  roomMaxSize: {x: 8, y: 4, z: 8}
-  cubePrefab: {fileID: 2126633678}
-  stairPrefab: {fileID: 0}
-  roomPrefab: {fileID: 0}
-  hallwayPrefab: {fileID: 0}
-  mat: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonCreator
+  dungeonWidth: 100
+  dungeonLength: 100
+  dungeonFloors: 0
+  roomWidthMin: 25
+  roomLengthMin: 25
+  corridorWidth: 5
+  maxIterations: 1
 --- !u!1 &1301047930
 GameObject:
   m_ObjectHideFlags: 0
