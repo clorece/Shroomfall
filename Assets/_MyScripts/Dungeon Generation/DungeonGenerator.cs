@@ -16,7 +16,7 @@ public class DungeonGenerator
         this.dungeonLength = length;
     }
 
-    public List<Node> CalculateRooms(int maxIterations, int roomWidthMin, int roomLengthMin)
+    public List<Node> CalculateDungeon(int maxIterations, int roomWidthMin, int roomLengthMin, float bottomCornerModifier, float topCornerModifier, int roomOffset, int corridorWidth)
     {
         BinarySpacePartitioner bsp = new BinarySpacePartitioner(dungeonWidth, dungeonLength);
 
@@ -26,7 +26,10 @@ public class DungeonGenerator
         List<Node> roomSpaces = StructureHelper.ExtractLowestLeaves(bsp.RootNode);
 
         RoomGeneration roomGenerator = new RoomGeneration(maxIterations, roomWidthMin, roomLengthMin);
-        List<RoomNode> roomList = roomGenerator.GenerateRooms(roomSpaces);
+        List<RoomNode> roomList = roomGenerator.GenerateRooms(roomSpaces, bottomCornerModifier, topCornerModifier, roomOffset);
+
+        CorridorGeneration corridorGenerator = new CorridorGeneration();
+        var corridorList = corridorGenerator.GenerateCorridors(allSpaceNodes, corridorWidth);
 
         return new List<Node>(roomList);
     }

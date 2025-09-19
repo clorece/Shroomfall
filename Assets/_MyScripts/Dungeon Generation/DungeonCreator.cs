@@ -4,8 +4,13 @@ public class DungeonCreator : MonoBehaviour
 {
     public int dungeonWidth, dungeonLength, dungeonFloors;
     public int roomWidthMin, roomLengthMin;
+    public int roomOffset;
     public int corridorWidth;
     public int maxIterations;
+    [Range(0.0f, 0.3f)]
+    public float bottomCornerModifier;
+    [Range(0.7f, 1.0f)]
+    public float topCornerModifier;
     public Material material;
 
     /*
@@ -30,7 +35,7 @@ public class DungeonCreator : MonoBehaviour
     {
         DungeonGenerator generator = new DungeonGenerator(dungeonWidth, dungeonLength);
 
-        var listOfRooms = generator.CalculateRooms(maxIterations, roomWidthMin, roomLengthMin);
+        var listOfRooms = generator.CalculateDungeon(maxIterations, roomWidthMin, roomLengthMin, bottomCornerModifier, topCornerModifier, roomOffset, corridorWidth);
 
         for (int i = 0; i < listOfRooms.Count; i++)
         {
