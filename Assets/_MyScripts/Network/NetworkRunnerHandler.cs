@@ -32,9 +32,8 @@ public class NetworkRunnerHandler : MonoBehaviour
         {
             networkRunner = Instantiate(networkRunnerPrefab);
             networkRunner.name = "Network runner";
+            DontDestroyOnLoad(networkRunner.gameObject);
         }
-
-        //var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
 
         Utils.DebugLog("InitializeNetworkRunner called");
 
@@ -104,20 +103,31 @@ public class NetworkRunnerHandler : MonoBehaviour
                 Scene           = sceneRef,
                 SceneManager    = sceneMgr
             });
-
-        // If you kept a lobby UI, also display `code` somewhere on-screen
         }
 
-       public async void JoinGame(string code) {
-            if (!networkRunner)
-            {
-                networkRunner = Instantiate(networkRunnerPrefab);
-                networkRunner.name = "Network Runner";
-                DontDestroyOnLoad(networkRunner.gameObject);
-            }
+    public async void JoinGame(string code)
+    {
+        code = new string((code ?? "").Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();
+        if (code.Length != 6)
+        {
+            Debug.Log("Invalid or blank code.");
+            return;
+        }
 
-            networkRunner.ProvideInput = true;
-            
+        //If we're already in a session, leave first (prevents weird auto-joins)
+        if (networkRunner && networkRunner.IsRunning)
+            await networkRunner.Shutdown();
+
+        //Ensure runner exists
+        if (!networkRunner)
+        {
+            networkRunner = Instantiate(networkRunnerPrefab);
+            networkRunner.name = "Network Runner";
+            DontDestroyOnLoad(networkRunner.gameObject);
+        }
+
+        networkRunner.ProvideInput = true;
+
         await networkRunner.StartGame(new StartGameArgs
         {
             GameMode = GameMode.Client,
@@ -127,5 +137,6 @@ public class NetworkRunnerHandler : MonoBehaviour
             SceneManager = GetSceneManager(networkRunner)
         });
     }
+
 
 }

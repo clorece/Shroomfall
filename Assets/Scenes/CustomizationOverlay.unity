@@ -536,8 +536,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Cap Color
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
-  m_sharedMaterial: {fileID: -140859042197621382, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
+  m_sharedMaterial: {fileID: -8146333573953339830, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -672,8 +672,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Eyes
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
-  m_sharedMaterial: {fileID: -140859042197621382, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
+  m_sharedMaterial: {fileID: -8146333573953339830, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -697,7 +697,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.8
+  m_fontSize: 63.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -973,8 +973,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Body Color
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
-  m_sharedMaterial: {fileID: -140859042197621382, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
+  m_sharedMaterial: {fileID: -8146333573953339830, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -998,7 +998,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40.55
+  m_fontSize: 49.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1316,8 +1316,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Mouth
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
-  m_sharedMaterial: {fileID: -140859042197621382, guid: 9e12c78898f652649bf94eeb8f98c299, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
+  m_sharedMaterial: {fileID: -8146333573953339830, guid: 05dbdec39d358994eaf035193daeae36, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1341,7 +1341,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.8
+  m_fontSize: 63.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
