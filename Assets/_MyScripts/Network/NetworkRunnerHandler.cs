@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using TMPro;
 
 public class NetworkRunnerHandler : MonoBehaviour
 {
@@ -81,27 +82,28 @@ public class NetworkRunnerHandler : MonoBehaviour
         return new string(s);
         }
 
-        public async void HostGame() {
-        var code = MakeCode();
-        if (!networkRunner) networkRunner = Instantiate(networkRunnerPrefab);
-        networkRunner.name = "Network Runner";
-        DontDestroyOnLoad(networkRunner.gameObject);
-        networkRunner.ProvideInput = true;
+        public async void HostGame()
+    {
+            var code = MakeCode();
+            if (!networkRunner) networkRunner = Instantiate(networkRunnerPrefab);
+            networkRunner.name = "Network Runner";
+            DontDestroyOnLoad(networkRunner.gameObject);
+            networkRunner.ProvideInput = true;
 
-        var sceneRef = SceneRef.FromIndex(1);     // Game scene index
-        var sceneMgr = GetSceneManager(networkRunner); // you already have this
-        // Make sure callbacks are added (Spawner will also self-register, see below)
-        var spawner = FindObjectOfType<Spawner>();
-        if (spawner) networkRunner.AddCallbacks(spawner);
+            var sceneRef = SceneRef.FromIndex(1);     // Game scene index
+            var sceneMgr = GetSceneManager(networkRunner); // you already have this
+            // Make sure callbacks are added (Spawner will also self-register, see below)
+            var spawner = FindObjectOfType<Spawner>();
+            if (spawner) networkRunner.AddCallbacks(spawner);
 
-        await networkRunner.StartGame(new StartGameArgs{
-            GameMode        = GameMode.Host,
-            SessionName     = code,
-            CustomLobbyName = "CodeLobby",
-            Address         = NetAddress.Any(),
-            Scene           = sceneRef,
-            SceneManager    = sceneMgr
-        });
+            await networkRunner.StartGame(new StartGameArgs{
+                GameMode        = GameMode.Host,
+                SessionName     = code,
+                CustomLobbyName = "CodeLobby",
+                Address         = NetAddress.Any(),
+                Scene           = sceneRef,
+                SceneManager    = sceneMgr
+            });
 
         // If you kept a lobby UI, also display `code` somewhere on-screen
         }

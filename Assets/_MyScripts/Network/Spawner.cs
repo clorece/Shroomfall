@@ -19,6 +19,7 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
+        
 
     }
 

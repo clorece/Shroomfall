@@ -1,10 +1,11 @@
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LobbyNavigation : MonoBehaviour {
-  [SerializeField] string customizationScene = "PlayerCustomization"; //build index 2
+public class MenuNavigation : MonoBehaviour {
+  [SerializeField] string lobbySceneName = "LobbyScene"; // set to your Lobby scene name
 
-  public void GoToCustomization() {
-    SceneManager.LoadScene(customizationScene, LoadSceneMode.Single);
+  public void GoToLobby() {
+    SceneManager.LoadScene(lobbySceneName, LoadSceneMode.Single);
   }
 }
