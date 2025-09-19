@@ -1,14 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+public enum RelativePosition {
+    Up,
+    Down,
+    Right,
+    Left
+}
 
 public class StructureHelper
 {
 
     // node traversal
-    public static List<Node> ExtractLowestLeaves(RoomNode parentNode)
+    public static List<Node> ExtractLowestLeaves(Node parentNode)
     {
         Queue<Node> nodesToCheck = new Queue<Node>();
         List<Node> listToReturn = new List<Node>();
